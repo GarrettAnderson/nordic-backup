@@ -6,7 +6,7 @@ export class App extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost/8080/data/index.php')
+    fetch('http://localhost/8080/data/index.php', { mode: 'no-cors'})
       .then(resp => resp.json)
       .then(data => {
         console.log(data)
