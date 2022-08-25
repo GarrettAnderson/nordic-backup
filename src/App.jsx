@@ -1,30 +1,73 @@
 import React, { Component } from 'react'
+import TableRow from './components/tableRow'
 
 export class App extends Component {
   state = {
-    data: []
+    data: [],
+    offset: 0,
   }
 
-  componentDidMount() {
-    fetch('http://localhost:8080/data/index.php', { mode: 'no-cors'})
+  fetchNextPage() {
+    const currentOffset = this.state.offset
+    fetch(
+      `http://localhost:8080/data/index.php?offset=${encodeURIComponent(
+        currentOffset
+      )}`,
+      {
+        // mode: 'no-cors',
+        // method: 'GET',
+        // headers: { 'Content-Type': 'application/json' },
+      }
+    )
       .then(resp => {
         console.log(resp)
         return resp.json()
       })
-      .then(data => {
-        console.log(data)
+      .then(json => {
+        // const data = JSON.parse(text);
+        console.log(json)
         this.setState({
-          data: data
+          data: json,
+          offset: json.size + currentOffset,
+        })
+        console.log(this.state)
+      })
+      .catch(e => {
+        console.error(e)
+      })
+  }
+
+  componentDidMount() {
+    fetch(
+      `http://localhost:8080/data/index.php?offset=${encodeURIComponent(
+        this.state.offset
+      )}`,
+      {
+        // mode: 'no-cors',
+        // method: 'GET',
+        // headers: { 'Content-Type': 'application/json' },
+      }
+    )
+      .then(resp => {
+        console.log(resp)
+        return resp.json()
+      })
+      .then(json => {
+        // const data = JSON.parse(text);
+        console.log(json)
+        this.setState({
+          data: json,
+          offset: json.size,
         })
       })
-      .catch((e) => {
+      .catch(e => {
         console.error(e)
       })
   }
 
   render() {
-    return <>
-      
+    return (
+      <>
         <table>
           <tr>
             <th>Customer Id</th>
@@ -33,11 +76,18 @@ export class App extends Component {
             <th>Backupset</th>
             <th>Day and Time</th>
           </tr>
-          {this.state.data.map(datum=>{
-            <td>{datum.customer_id}</td>
+          {this.state.data.map((datum, index) => {
+            return <TableRow data={datum} index={index} />
           })}
+          <tr>
+            <button
+              onClick={() => {
+                this.fetchNextPage()
+              }}
+            >Next page</button>
+          </tr>
         </table>
- 
-    </>
+      </>
+    )
   }
 }
