@@ -20,3 +20,6 @@
 
 *-error.log
 *-debug.log
+
+vendor/
+.env
