@@ -113,7 +113,7 @@ export class App extends Component {
             })}
           </tbody>
         </table>
-        <div>
+        <div className="pag-buttons">
           {this.state.offset > 50 ? (
             <button
               onClick={() => {
