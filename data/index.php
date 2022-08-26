@@ -2,11 +2,6 @@
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
 
-// $servername = '38.77.132.45';
-// $username = 'root';
-// $password = 'dvHJ7fbfbF3jUFjD';
-// $dbname = 'stats';
-
 $offset = $_GET['offset'];
 if (!is_numeric($offset)){
     exit();
