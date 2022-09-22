@@ -3,8 +3,8 @@
   "name": "nordic-backup",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "predeploy": "react-scripts build",
+    "build": "NODE_ENV=production react-scripts build",
+    "predeploy": "NODE_ENV=production react-scripts build",
     "deploy": "echo 'To setup deployment run: npm run setup-deploy'",
     "setup-deploy": "app-app --deploy && npm run deploy",
     "test": "react-scripts test",

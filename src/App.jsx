@@ -3,20 +3,20 @@ import TableRow from './components/tableRow'
 
 export class App extends Component {
   state = {
-    data: [],
-    offset: 0,
+    data: [], // php json
+    offset: 0, // how far from 0 to collect, how many records to get from 0. ie. if offset is 50, get records in database from 50 and onward
   }
 
   fetchPrevPage() {
     const currentOffset = this.state.offset - 50
     fetch(
-      `http://localhost:8080/data/index.php?offset=${encodeURIComponent(
+      `http://38.77.132.45:8080/data/index.php?offset=${encodeURIComponent(
         currentOffset
       )}`,
       {
-        // mode: 'no-cors',
-        // method: 'GET',
-        // headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       }
     )
       .then(resp => {
@@ -41,13 +41,13 @@ export class App extends Component {
   fetchNextPage() {
     const currentOffset = this.state.offset
     fetch(
-      `http://localhost:8080/data/index.php?offset=${encodeURIComponent(
+      `http://38.77.132.45:8080/data/index.php?offset=${encodeURIComponent(
         currentOffset
       )}`,
       {
-        // mode: 'no-cors',
-        // method: 'GET',
-        // headers: { 'Content-Type': 'application/json' },
+        mode: 'cors',
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       }
     )
       .then(resp => {
@@ -70,13 +70,15 @@ export class App extends Component {
 
   componentDidMount() {
     fetch(
-      `http://localhost:8080/data/index.php?offset=${encodeURIComponent(
+      // encode offset into param to send to php
+      `http://38.77.132.45:8080/data/index.php?offset=${encodeURIComponent(
         this.state.offset
       )}`,
       {
-        // mode: 'no-cors',
-        // method: 'GET',
-        // headers: { 'Content-Type': 'application/json' },
+        // use cors
+        mode: 'cors',
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
       }
     )
       .then(resp => {
@@ -114,6 +116,7 @@ export class App extends Component {
           </tbody>
         </table>
         <div className="pag-buttons">
+          {/* check that you can fetch the previous page */}
           {this.state.offset > 50 ? (
             <button
               onClick={() => {

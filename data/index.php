@@ -1,8 +1,10 @@
 <?php
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,PATCH,OPTIONS');
+header('Access-Control-Allow-Headers: DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type');
 
 $offset = $_GET['offset'];
+// sanitize input (make sure this is a number)
 if (!is_numeric($offset)){
     exit();
 }
@@ -10,6 +12,8 @@ if (!is_numeric($offset)){
 $servername = "127.0.0.1";
 $username = "root";
 $password = "password";
+$dbname = "stats";
+// $password = "dvHJ7fbfbF3jUFjD";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -35,10 +39,13 @@ $json_array = array();
 //     echo "0 results";
 //   }
 
+// this builds the json structure
 while($row = $result->fetch_assoc()) {
     $json_array[] =$row;
 }
+// respond with json
 echo json_encode($json_array, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
+// close connection
   $conn-> close();
 ?>

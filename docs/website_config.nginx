@@ -1,0 +1,59 @@
+# this block is for the react app
+server { 
+        listen      80; 
+        listen      [::]:80; 
+        server_name _; 
+        set         $base /var/www/app; 
+        # serve all static files from here to client
+        root        $base/build; 
+ 
+# security 
+        include     nginxconfig.io/security.conf; 
+ 
+# index.html fallback 
+        location / { 
+                try_files $uri $uri/ /index.html; 
+        } 
+ 
+# additional config 
+        include nginxconfig.io/general.conf; 
+        add_header 'Access-Control-Allow-Origin' '*'; 
+        add_header 'Access-Control-Allow-Credentials' 'true'; 
+        add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS'; 
+        add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type'; 
+}
+
+# php block that sends php files
+server {
+    # listen on different port
+	listen      8080 default_server;
+	listen [::]:8080 default_server;
+#   listen      [::]:80;
+#    server_name 38.77.132.45;
+	set         $base /var/www;
+	root        $base/app;
+
+#	add_header 'Access-Control-Allow-Origin' '*';
+#	add_header 'Access-Control-Allow-Credentials' 'true';
+#	add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+	add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
+# security
+#	include     nginxconfig.io/security.conf;
+
+	index index.php;
+
+	server_name 38.77.132.45;
+
+	location / {
+		try_files $uri $uri/ =404;
+	}
+# additional config
+	include nginxconfig.io/general.conf;
+
+# handle .php
+	location ~ \.php$ {
+		fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+		include      nginxconfig.io/php_fastcgi.conf;
+	}
+}
+
